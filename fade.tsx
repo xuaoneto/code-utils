@@ -15,8 +15,32 @@ export default function Fade({
   duration = 1000,
   delay = "0",
   when,
-  isMaintain = true
-}: FadeProps) {
+  isMaintain = true,
+}: {
+  boxStyle?: BoxProps;
+  distance?: `${string}px`;
+  right?: boolean;
+  left?: boolean;
+  top?: boolean;
+  bottom?: boolean;
+  ttf?:
+    | "linear"
+    | "ease"
+    | "ease-in"
+    | "ease-out"
+    | "ease-in-out"
+    | "step-start"
+    | "step-end"
+    | `steps(${string})`
+    | `cubic-bezier(${string})`
+    | `frames(${string})`;
+  duration?: number;
+  delay?: number | string;
+  when?: boolean;
+  animationSteps?: string[];
+  isMaintain?: boolean;
+  children: ReactNode | JSX.Element;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   let isVisible = useInViewport(ref, "-50px", isMaintain);
   if (!(when === undefined)) isVisible = when;

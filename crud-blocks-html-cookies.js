@@ -1,3 +1,4 @@
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -9,20 +10,16 @@ import {
   Link,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { DUIArray } from "components/ServicesPage/NavServices/dui-array";
-import { RightSideMenu } from "components/ServicesPage/NavServices/right-side-menu";
 import { ResponsiveTitle } from "components/ResponsiveTitles";
+import { RightSideMenu } from "components/ServicesPage/NavServices/right-side-menu";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import api from "services/api";
 import Cookies from "universal-cookie";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 export function SideBlogItems({ posts }) {
   const router = useRouter();
