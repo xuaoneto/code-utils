@@ -1,7 +1,6 @@
-import { useRef } from "react";
-import type { FadeProps } from "./types";
 import { Box } from "@chakra-ui/react";
-import { useInViewport } from "hooks/use-in-view-port";
+import { useEffect, useRef } from "react";
+import type { FadeProps } from "./types";
 
 export default function Fade({
   children,
@@ -16,6 +15,7 @@ export default function Fade({
   delay = "0",
   when,
   isMaintain = true,
+  rootMargin = "-50px",
 }: {
   boxStyle?: BoxProps;
   distance?: `${string}px`;
@@ -39,11 +39,34 @@ export default function Fade({
   when?: boolean;
   animationSteps?: string[];
   isMaintain?: boolean;
-  children: ReactNode | JSX.Element;
+  rootMargin?: `${string}px`;
+  children: ReactNode | JSX.Element | undefined;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  let isVisible = useInViewport(ref, "-50px", isMaintain);
-  if (!(when === undefined)) isVisible = when;
+
+  useEffect(() => {
+    const target = ref.current;
+    const elemStyle = target.style;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!(when === undefined)) return;
+        if (isMaintain) {
+          if (entry.isIntersecting) {
+            elemStyle.transform = "translate(0,0)";
+            elemStyle.opacity = "1";
+          }
+        } else {
+          elemStyle.transform = `translateX(${
+            left ? `-${distance}` : right ? distance : 0
+          }) translateY(${top ? `-${distance}` : bottom ? distance : 0})`;
+          elemStyle.opacity = "0";
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(target);
+    return () => observer.unobserve(target);
+  }, []);
 
   return (
     <Box
@@ -53,9 +76,9 @@ export default function Fade({
       transitionTimingFunction={ttf}
       transitionDelay={`${delay}ms`}
       transitionProperty="transform, opacity"
-      opacity={isVisible ? "1" : "0"}
+      opacity={when ? "1" : "0"}
       transform={
-        isVisible
+        when
           ? "translate(0,0)"
           : `translateX(${
               left ? `-${distance}` : right ? distance : 0

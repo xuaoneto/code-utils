@@ -20,16 +20,16 @@ export function FloatingNames({
     const { top } = target.getBoundingClientRect();
     const { top: bodyYTop } = document.body.getBoundingClientRect();
     const { innerHeight } = window;
-    const calc = top - bodyYTop;
+    const rectTop = top - bodyYTop;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           scrollY.onChange((scrollPos) => {
             const offset = scrollPos + innerHeight;
-            let calcule = offset / calc - 1;
-            if (calcule < 0) calcule = 0;
+            let calc = offset / rectTop - 1;
+            if (calc < 0) calc = 0;
             ref.current.style.transform = `translateY(${toTop ? "-" : ""}${
-              calcule * distance
+              calc * distance
             }px) translateZ(0px)`;
           });
         } else {
